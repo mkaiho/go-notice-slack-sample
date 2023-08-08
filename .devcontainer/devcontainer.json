@@ -1,0 +1,8 @@
+{
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "workspace",
+  "workspaceFolder": "/go/src/github.com/mkaiho/go-notice-slack-sample",
+  "extensions": [
+    "golang.go"
+  ]
+}

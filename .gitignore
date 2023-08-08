@@ -19,3 +19,15 @@
 
 # Go workspace file
 go.work
+
+.ssh/
+
+.envrc
+
+_deployments/bin/
+_deployments/zip/
+
+test-results/
+
+docker/mysql/data/
+docker/redis/*/data/
