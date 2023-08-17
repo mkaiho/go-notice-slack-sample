@@ -34,6 +34,9 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
   && asdf plugin-add awscli https://github.com/MetricMike/asdf-awscli.git \
   && asdf install awscli latest:2 \
   && asdf global awscli latest \
+  && asdf plugin-add aws-vault https://github.com/karancode/asdf-aws-vault.git \
+  && asdf install aws-vault latest \
+  && asdf global aws-vault latest \
   && asdf plugin-add golang https://github.com/kennyp/asdf-golang.git \
   && asdf install golang ${GO_VERSION} \
   && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
