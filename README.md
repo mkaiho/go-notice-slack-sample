@@ -45,3 +45,17 @@ Repository for sample notifications from Slack in Go language.
     ```
     $ aws-vault exec stage -- aws s3 ls
     ```
+
+## Deploy and destroy applications
+
+### Deploy applications with CDK in AWS
+
+```
+$ aws-vault exec stage -- make deploy
+```
+
+### Destroy applications with CDK in AWS
+
+```
+$ aws-vault exec stage -- make destroy
+```
