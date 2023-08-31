@@ -4,7 +4,7 @@ SHELL ["/bin/bash", "-c"]
 
 ARG ASDF_VERSION=v0.11.1
 ARG DIRENV_VERSION=2.32.2
-ARG GO_VERSION=1.20
+ARG GO_VERSION=1.21.0
 ARG NODE_VERSION=18.13.0
 ARG SRC_MODULE=github.com/mkaiho/go-notice-slack-sample
 
