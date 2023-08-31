@@ -37,6 +37,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
   && asdf plugin-add aws-vault https://github.com/karancode/asdf-aws-vault.git \
   && asdf install aws-vault latest \
   && asdf global aws-vault latest \
+  && echo 'export GPG_TTY="$(tty)"' >> ~/.bashrc \
   && asdf plugin-add golang https://github.com/kennyp/asdf-golang.git \
   && asdf install golang ${GO_VERSION} \
   && asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git \

@@ -8,7 +8,7 @@ Repository for sample notifications from Slack in Go language.
 
 ### Set environment variables
 
-1. Generate GPG key
+1. Export environment variables
     ```
     $ touch .envrc
     $ echo "export CDK_DEFAULT_ACCOUNT=<YOUR AWS ACCOUNT FOR DEPLOY APPS>" >> .envrc
@@ -16,6 +16,7 @@ Repository for sample notifications from Slack in Go language.
     $ echo "export AWS_VAULT_BACKEND=pass" >> .envrc
     $ echo "export AWS_VAULT_PASS_PREFIX=aws-vault" >> .envrc
     $ echo "export AWS_SESSION_TOKEN_TTL=1h" >> .envrc
+    $ echo "export AWS_DEFAULT_REGION=<YOUR AWS DEFAULT REGION>" >> .envrc
     $ direnv allow
     ```
 
@@ -34,12 +35,6 @@ Repository for sample notifications from Slack in Go language.
     $ aws-vault add <PROFILE NAME>
     Enter Access Key ID: <YOUR AWS ACCESS KEY>
     Enter Secret Access Key: <YOUR AWS SECRET ACCESS KEY>
-    ```
-1. Export environment variables
-    ```
-    $ export AWS_VAULT_BACKEND=pass
-    $ export AWS_VAULT_PASS_PREFIX=aws-vault
-    $ export AWS_SESSION_TOKEN_TTL=1h
     ```
 1. Check for successful completion
     ```
