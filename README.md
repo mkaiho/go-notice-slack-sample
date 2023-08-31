@@ -20,6 +20,12 @@ Repository for sample notifications from Slack in Go language.
     $ direnv allow
     ```
 
+### Install dependencies
+
+    ```
+    $ make dev-deps deploy-deps
+    ```
+
 ### AWS credentials
 
 1. Generate GPG key
@@ -45,12 +51,31 @@ Repository for sample notifications from Slack in Go language.
 
 ### Deploy applications with CDK in AWS
 
-```
-$ aws-vault exec stage -- make deploy
-```
+1. Build applications
+    ```
+    $ make build
+    ```
+1. Archive bin files for Lambda
+    ```
+    $ make archive
+    ```
+1. Deploy applications
+    ```
+    $ aws-vault exec stage -- make deploy
+    ```
 
 ### Destroy applications with CDK in AWS
 
 ```
 $ aws-vault exec stage -- make destroy
+```
+
+## Invoke AWS Lambda applications
+
+```
+$ aws-vault exec <PROFILE NAME> -- aws lambda invoke \
+  --invocation-type Event \
+  --function-name go-notice-slack-sample-message-post \
+  --payload $(echo '{ "message": "hello world" }' | base64) \
+  response.json
 ```

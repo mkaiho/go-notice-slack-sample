@@ -1,6 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as logs from 'aws-cdk-lib/aws-logs';
 
 interface StageContext {
   name: string
@@ -195,6 +197,20 @@ export class GoNoticeSlackSampleStack extends cdk.Stack {
         instanceSg.ref,
       ],
       keyName: keyPair.keyName,
+    })
+
+    // Lambda
+    const fnName = "message-post"
+    const fn = new lambda.Function(this, `${context.name}-${fnName}`, {
+      functionName: `${context.name}-${fnName}`,
+      code: lambda.AssetCode.fromAsset(`../zip/cmd/${fnName}.zip`),
+      handler: fnName,
+      runtime: lambda.Runtime.PROVIDED_AL2,
+    })
+    new logs.LogGroup(this, `${context.name}-${fnName}-log`, {
+      logGroupName: `/aws/lambda/${context.name}-${fnName}`,
+      retention: logs.RetentionDays.ONE_DAY,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
   }
 }

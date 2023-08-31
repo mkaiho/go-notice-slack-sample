@@ -18,7 +18,9 @@ archive: $(ARCHIVES)
 $(ARCHIVES):$(BINARIES)
 	@test -d $(ARCHIVE_DIR) || mkdir $(ARCHIVE_DIR)
 	@test -d $(ARCHIVE_DIR)/cmd || mkdir $(ARCHIVE_DIR)/cmd
-	@zip -j $@.zip $(@:$(ARCHIVE_DIR)/%=$(BIN_DIR)/%)
+	@cp $(@:$(ARCHIVE_DIR)/%=$(BIN_DIR)/%) $(BIN_DIR)/bootstrap
+	@zip -j $@.zip $(BIN_DIR)/bootstrap
+	@rm $(BIN_DIR)/bootstrap
 
 .PHONY: reshim
 reshim:
