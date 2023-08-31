@@ -1,4 +1,4 @@
-# go-notice-slack-sample#
+# go-notice-slack-sample
 
 ## Description
 
