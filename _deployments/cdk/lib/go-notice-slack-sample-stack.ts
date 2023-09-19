@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
 interface StageContext {
   name: string
@@ -212,5 +213,14 @@ export class GoNoticeSlackSampleStack extends cdk.Stack {
       retention: logs.RetentionDays.ONE_DAY,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
+
+    const restApi = new apigateway.RestApi(this, `${context.name}-api`, {
+      restApiName: `${context.name}`,
+    })
+    const restMessagePost = restApi.root.addResource(`${fnName}`)
+    restMessagePost.addMethod(
+      "POST",
+      new apigateway.LambdaIntegration(fn)
+    )
   }
 }

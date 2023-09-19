@@ -1,9 +1,12 @@
 package cli
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/spf13/cobra"
 )
@@ -23,34 +26,55 @@ type messagePostCommand struct {
 	rootCmd cobra.Command
 }
 
-func (e *messagePostCommand) Execute() {
+func (c *messagePostCommand) Execute() {
 	if len(os.Getenv("AWS_LAMBDA_RUNTIME_API")) > 0 {
-		lambda.Start(e.execute)
+		lambda.Start(c.handle)
 	} else {
-		if err := e.rootCmd.Execute(); err != nil {
+		if err := c.rootCmd.Execute(); err != nil {
 			os.Exit(1)
 		}
 	}
 }
 
-func (e *messagePostCommand) execute(req MessagePostCommandRequest) error {
+func (c *messagePostCommand) execute(req MessagePostCommandRequest) error {
 	log.Println(req.Message)
-
 	return nil
 }
 
-func (e *messagePostCommand) initRootCommand() {
+func (c *messagePostCommand) handle(e events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	var req MessagePostCommandRequest
-	e.rootCmd = cobra.Command{
+	err := json.Unmarshal([]byte(e.Body), &req)
+	if err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusBadRequest,
+			Body:       "invalid json format",
+		}, err
+	}
+
+	if err := c.execute(req); err != nil {
+		return events.APIGatewayProxyResponse{
+			StatusCode: http.StatusInternalServerError,
+			Body:       http.StatusText(http.StatusInternalServerError),
+		}, err
+	}
+
+	return events.APIGatewayProxyResponse{
+		StatusCode: http.StatusOK,
+	}, nil
+}
+
+func (c *messagePostCommand) initRootCommand() {
+	var req MessagePostCommandRequest
+	c.rootCmd = cobra.Command{
 		Use:   "message-post",
 		Short: "post message to slack",
 		Long:  "Post message to slack.",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return e.execute(req)
+			return c.execute(req)
 		},
 		SilenceUsage:  true,
 		SilenceErrors: true,
 	}
-	e.rootCmd.PersistentFlags().StringVar(&req.Message, "message", "", "usage")
-	e.rootCmd.MarkPersistentFlagRequired("message")
+	c.rootCmd.PersistentFlags().StringVar(&req.Message, "message", "", "usage")
+	c.rootCmd.MarkPersistentFlagRequired("message")
 }
